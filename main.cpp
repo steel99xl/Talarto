@@ -183,11 +183,6 @@ int main(int argc, char** argv){
                 }
                 break;
 
-            case('d'):
-                RandomTranspher(Random,D,Player.D);
-                Player.D.UsedCount = 0;
-                break;
-
             // Discard and draw
             case('x'):
                 if(Player.DiscardCount > 0 && Player.D.UsedCount > 0){
@@ -240,6 +235,7 @@ int main(int argc, char** argv){
             }
             Player.DiscardCount = Player.DiscardLimit;
             Player.HandCount = Player.HandLimit;
+            WinCount = WinCount +1;
         }
 
 
@@ -273,6 +269,13 @@ int main(int argc, char** argv){
         sprintf(IBuff, "%d", TargetScore);
         Screen.PutText(Screen.Width*0.10,Screen.Height*0.2,"TargetScore : ", graphics::Yellow_On_Red);
         Screen.PutText(Screen.Width*0.25,Screen.Height*0.2,IBuff, graphics::Yellow_On_Red);
+
+
+        Screen.PutText(Screen.Width*.8,Screen.Height*0.10,"HAND    : Z");
+        Screen.PutText(Screen.Width*.8,Screen.Height*0.15,"DISCARD : X");
+        
+        sprintf(IBuff, "%d", WinCount);
+        Screen.PutText(1,Screen.Height,IBuff);
 
         Pos.X = Player.Start.X;
         DrawHand(Screen,Player,vpc,Map,Pos,Scale);

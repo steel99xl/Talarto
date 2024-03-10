@@ -3,6 +3,12 @@
 #include "SimpleRandom/simplerandom.hpp"
 #include <stdlib.h>
 
+
+const char * const CClub = "󰣎";
+const char * const CHeart = "";
+const char * const CSpade = "󰣑";
+const char * const CDiamond = "󰣏";
+
 typedef struct Card{
     int ID;
     int Value;
@@ -314,7 +320,6 @@ inline int IsThree(Deck &D,int IDSkip = 0){
                     }
                 }
             }
-            return -1;
         }
 
     }

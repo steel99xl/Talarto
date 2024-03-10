@@ -57,6 +57,7 @@ inline void DrawHand(graphics::Display &D,Hand &H, GCard &G, MapList &M, graphic
 
     // Draw hand of regular cards
 
+    int Type = 0;
 
     for(int i = 0; i < H.D.Count; i++){
         if(H.D.Cards[i].IsUsed){
@@ -65,6 +66,21 @@ inline void DrawHand(graphics::Display &D,Hand &H, GCard &G, MapList &M, graphic
             D.Rect((int)G.Start.X + Pos.X+1, (int)G.Start.Y + Pos.Y+1, (int)G.End.X + Pos.X, (int)G.End.Y + Pos.Y, G.Background,true);
         }
         D.Rect((int)G.Start.X + Pos.X, (int)G.Start.Y + Pos.Y, (int)G.End.X + Pos.X, (int)G.End.Y + Pos.Y, H.Box);
+
+
+
+        switch(H.D.Cards[i].Suit){
+            case('H'):
+            case('S'):
+                Type = 1;
+                break;
+
+            case('D'):
+            case('C'):
+                Type = 0;
+                break;
+        }
+
         switch(H.D.Cards[i].Suit){
             case('S'):
             case('C'):
@@ -75,9 +91,14 @@ inline void DrawHand(graphics::Display &D,Hand &H, GCard &G, MapList &M, graphic
                 } else {
                     D.SetPixel(-G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, MapLookUp(M,H.D.Cards[i]), graphics::Black_On_White);
                 }
-                graphics::EasyChar(H.D.Cards[i].Suit, G.buf);
-                D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, G.buf, graphics::Black_On_White);
-                D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, G.buf, graphics::Black_On_White);
+
+                if(Type == 1){
+                    D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CSpade, graphics::Black_On_White);
+                    D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CSpade, graphics::Black_On_White);
+                } else {
+                    D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CClub, graphics::Black_On_White);
+                    D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CClub, graphics::Black_On_White);
+                }
 
                 break;
 
@@ -91,9 +112,13 @@ inline void DrawHand(graphics::Display &D,Hand &H, GCard &G, MapList &M, graphic
                 } else {
                     D.SetPixel(-G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, MapLookUp(M,H.D.Cards[i]), graphics::Red_On_White);
                 }
-                graphics::EasyChar(H.D.Cards[i].Suit, G.buf);
-                D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, G.buf, graphics::Red_On_White);
-                D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, G.buf, graphics::Red_On_White);
+                if(Type == 1){
+                    D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CHeart, graphics::Red_On_White);
+                    D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CHeart, graphics::Red_On_White);
+                } else {
+                    D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CDiamond, graphics::Red_On_White);
+                    D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CDiamond, graphics::Red_On_White);
+                }
                 break;
         }
 
@@ -117,6 +142,16 @@ inline void DrawSelectedCard(graphics::Display &D,Hand &H, GCard &G, MapList &M,
     }
 
     D.Rect((int)G.Start.X + Pos.X, (int)G.Start.Y + Pos.Y, (int)G.End.X + Pos.X, (int)G.End.Y + Pos.Y, H.Box);
+
+    int Type = 0;
+
+    switch(H.D.Cards[H.Selected].Suit){
+        case('H'):
+        case('S'):
+            Type = 1;
+            break;
+    }
+
     switch(H.D.Cards[H.Selected].Suit){
         case('S'):
         case('C'):
@@ -127,15 +162,18 @@ inline void DrawSelectedCard(graphics::Display &D,Hand &H, GCard &G, MapList &M,
             } else {
                 D.SetPixel(-G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, MapLookUp(M,H.D.Cards[H.Selected]), graphics::Black_On_Blue);
             }
-            graphics::EasyChar(H.D.Cards[H.Selected].Suit, G.buf);
-            D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, G.buf, graphics::Black_On_Blue);
-            D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, G.buf, graphics::Black_On_Blue);
+            if(Type == 1){
+                D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CSpade, graphics::Black_On_Blue);
+                D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CSpade, graphics::Black_On_Blue);
+            } else {
+                D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CClub, graphics::Black_On_Blue);
+                D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CClub, graphics::Black_On_Blue);
+            }
 
             break;
 
 
         case('H'):
-
         case('D'):
             D.SetPixel(G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, MapLookUp(M,H.D.Cards[H.Selected]), graphics::Red_On_Blue);
             if(graphics::GetLen(MapLookUp(M,H.D.Cards[H.Selected])) > 2){
@@ -143,9 +181,13 @@ inline void DrawSelectedCard(graphics::Display &D,Hand &H, GCard &G, MapList &M,
             } else {
                 D.SetPixel(-G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, MapLookUp(M,H.D.Cards[H.Selected]), graphics::Red_On_Blue);
             }
-            graphics::EasyChar(H.D.Cards[H.Selected].Suit, G.buf);
-            D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, G.buf, graphics::Red_On_Blue);
-            D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, G.buf, graphics::Red_On_Blue);
+            if(Type == 1){
+                D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CHeart, graphics::Red_On_Blue);
+                D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CHeart, graphics::Red_On_Blue);
+            } else {
+                D.SetPixel(-G.IDPos.X + Pos.X, G.IDPos.Y + Pos.Y, CDiamond, graphics::Red_On_Blue);
+                D.SetPixel(G.IDPos.X + Pos.X, -G.IDPos.Y + Pos.Y, CDiamond, graphics::Red_On_Blue);
+            }
             break;
     }
 }
