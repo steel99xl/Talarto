@@ -12,5 +12,6 @@ A 🐧 or 🐡 based enviroment
 
 run ```build.sh```
 
-
+## Important Notes
+```q``` Quits the game at any point 
 
