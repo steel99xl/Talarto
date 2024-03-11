@@ -382,11 +382,14 @@ inline int IsStraight(Deck &D){
             Count = 1;
             for(int j = 0; j < Temp.Count; j++){
                 if(Temp.Cards[j].IsUsed && j != i){
-                    if(A.ID == Temp.Cards[j].ID - Count){
-                        Count +=1;
-                        if(Count == 5){
-                            return A.ID;
-                        }
+                    if(A.ID == Temp.Cards[j].ID - Count || A.ID == Temp.Cards[j].ID + Count ){
+                        Count = Count + 1;
+                    } else if(A.ID == Temp.Cards[Temp.Count-j].ID - Count || A.ID == Temp.Cards[Temp.Count-j].ID + Count ){
+                        Count = Count + 1;
+                    }
+
+                    if(Count == 5){
+                        return A.ID;
                     }
                 }
             }
@@ -559,12 +562,18 @@ inline int ScoreDeck(Deck D,MapList SLMap, int QCResult = -1){
 
     switch(QCResult){
         case(1):
-            SortDeckID(D);
             for(int i = D.Count; i > 0; i--){
                 if(D.Cards[i].IsUsed){
-                    Score = D.Cards[i].Value + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
-                    break;
+                    tmp = D.Cards[i].Value;
+                    for(int j = D.Count; j > 0; j--){
+                        if(D.Cards[j].IsUsed && D.Cards[j].Value > tmp){
+                            tmp = D.Cards[i].Value;
+                        }
+                    }
                 }
+
+                Score = tmp + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
+                break;
             }
             break;
         case(2):
