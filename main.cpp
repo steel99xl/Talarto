@@ -1,3 +1,4 @@
+#include "inc/Cards.h"
 #include "inc/TerminalGraphics/tgraphics.hpp"
 #include "inc/SimpleRandom/simplerandom.hpp"
 #include "inc/GCards.h"
@@ -21,6 +22,19 @@ void Title(graphics::Display &D){
 
     D.ClearPixels(graphics::LightPixel, graphics::Black);
 
+}
+
+
+void Help(graphics::Display &D){
+
+    D.PutText((D.Width/2)-5,D.Height/2-4,"Help:", graphics::Green);
+    D.PutText((D.Width/2)-15,D.Height/2-3,"LEFT & RIGHT Arrows let you  move between cards", graphics::Green);
+    D.PutText((D.Width/2)-15,D.Height/2-2,"UP & DOWN Arrows let you select and un-select cards", graphics::Green);
+
+    D.PutText((D.Width/2)-15,D.Height/2-1,"After each win you last used type 'levels up'", graphics::Green);
+    D.PutText((D.Width/2)-15,D.Height/2,"After every three win your 'Hands', 'Discard' and three random types 'level up'", graphics::Green, graphics::LEFT,graphics::DOWN,46);
+
+    D.Show();
 }
 
 
@@ -72,18 +86,18 @@ int main(int argc, char** argv){
 
     GCard vpc;
     // For Suit printint
-    vpc.Start.X = -3.0;
+    vpc.Start.X = -4.0;
     vpc.Start.Y = -3.0;
     vpc.Start.Z = 1.0;
 
-    vpc.IDPos.X = -2.0;
+    vpc.IDPos.X = -3.0;
     vpc.IDPos.Y = -2.0;
     vpc.IDPos.Z = 1.0;
 
-    vpc.End.X = 3.0;
+    vpc.End.X = 4.0;
     vpc.End.Y = 3.0;
     vpc.End.Z = 1.0;
-    vpc.Width = 7;
+    vpc.Width = 9;
 
     graphics::Matrix3x3<double> Scale(1.0,1.0,1.0);
 
@@ -134,6 +148,10 @@ int main(int argc, char** argv){
 
 
     Title(Screen);
+
+    bool HelpScreen = true;
+
+    MarkDeckUnUsed(Player.D);
 
 
     graphics::Input InputManager;
@@ -190,6 +208,7 @@ int main(int argc, char** argv){
                     Player.D.UsedCount = 0;
                     Player.DiscardCount = Player.DiscardCount -1;
                     CheckResult = 0;
+                    MarkDeckUnUsed(Player.D);
                 }
                 break;
 
@@ -201,7 +220,16 @@ int main(int argc, char** argv){
                 SortDeckSuit(Player.D);
                 break;
 
+            case('h'):
+                if(HelpScreen){
+                    Help(Screen);
+                } else {
+                   Screen.ClearPixels(graphics::LightPixel, graphics::Black,Screen.Width/2-15,Screen.Height/2-4, Screen.Width/2+50, Screen.Height/2+2);
+                }
+                HelpScreen = !HelpScreen;
+                
                 break;
+
             // Hand
             case('z'):
                 if(Player.HandCount > 0 && Player.D.UsedCount > 0){
@@ -211,6 +239,7 @@ int main(int argc, char** argv){
                     Player.D.UsedCount = 0;
                     Player.HandCount = Player.HandCount -1;
                     CheckResult = 0;
+                    MarkDeckUnUsed(Player.D);
                 }
 
                 break;
@@ -244,9 +273,6 @@ int main(int argc, char** argv){
         }
 
 
-
-
-
         // Draw UI
         
 
@@ -273,6 +299,8 @@ int main(int argc, char** argv){
 
         Screen.PutText(Screen.Width*.8,Screen.Height*0.10,"HAND    : Z");
         Screen.PutText(Screen.Width*.8,Screen.Height*0.15,"DISCARD : X");
+        Screen.PutText(Screen.Width*.8,Screen.Height*0.20,"HELP    : H");
+        Screen.PutText(Screen.Width*.8,Screen.Height*0.25,"QUIT    : Q");
         
         sprintf(IBuff, "%d", WinCount);
         Screen.PutText(1,Screen.Height,IBuff);
@@ -280,7 +308,7 @@ int main(int argc, char** argv){
         Pos.X = Player.Start.X;
         DrawHand(Screen,Player,vpc,Map,Pos,Scale);
 
-        Pos.X = Player.Start.X+(vpc.Width * Player.Selected);
+        Pos.X = Player.Start.X;//(vpc.Width * Player.Selected);
 
         DrawSelectedCard(Screen,Player,vpc,Map,Pos,Scale);
 

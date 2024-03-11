@@ -135,6 +135,18 @@ inline void DrawHand(graphics::Display &D,Hand &H, GCard &G, MapList &M, graphic
 template <typename T>
 inline void DrawSelectedCard(graphics::Display &D,Hand &H, GCard &G, MapList &M, graphics::Point3D<T> Pos, graphics::Matrix3x3<T> Scale){
 
+    bool Scaling = true;
+    while(Scaling){
+    if(((H.D.Count * G.Width) * Scale.B.Y) > (H.MaxX-H.Start.X)){
+        Scale.B.Y -= 0.1;
+    } else {
+        Scaling = false;
+    }
+    }
+    for(int i = 0; i < H.Selected; i++){
+    Pos.X += (G.Width * Scale.B.Y);
+    }
+
     if(H.D.Cards[H.Selected].IsUsed){
         D.Rect((int)G.Start.X + Pos.X+1, (int)G.Start.Y + Pos.Y+1, (int)G.End.X + Pos.X, (int)G.End.Y + Pos.Y, H.Select,true);
     } else {

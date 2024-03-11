@@ -1129,6 +1129,6 @@ namespace  graphics{
 
     } Display;
 
-};
+}
 
 #endif

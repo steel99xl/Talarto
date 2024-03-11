@@ -4,10 +4,10 @@
 #include <stdlib.h>
 
 
-const char * const CClub = "󰣎";
-const char * const CHeart = "";
-const char * const CSpade = "󰣑";
-const char * const CDiamond = "󰣏";
+const char * const CClub = "\u2663";
+const char * const CHeart = "\u2665";
+const char * const CSpade = "\u2664";
+const char * const CDiamond = "\u2666";
 
 typedef struct Card{
     int ID;
