@@ -377,11 +377,11 @@ inline int IsStraight(Deck &D){
     }
         
     for(int i = 0; i < Temp.Count; i++){
-        if(D.Cards[i].IsUsed){
+        if(Temp.Cards[i].IsUsed){
             A = Temp.Cards[i];
             Count = 1;
             for(int j = 0; j < Temp.Count; j++){
-                if(Temp.Cards[j].IsUsed && j != i){
+                if(Temp.Cards[j].IsUsed && i != j){
                     if(A.ID == Temp.Cards[j].ID - Count || A.ID == Temp.Cards[j].ID + Count ){
                         Count = Count + 1;
                     } else if(A.ID == Temp.Cards[Temp.Count-j].ID - Count || A.ID == Temp.Cards[Temp.Count-j].ID + Count ){
