@@ -221,6 +221,7 @@ int main(int argc, char** argv){
 
 
         if(PScore >= TargetScore){
+            WinCount = WinCount +1;
             Screen.PutText(Screen.Width*0.25,Screen.Height*0.25,"            ", graphics::Black);
             PScore = 0;
             TargetScore = TargetScore * TMut;
@@ -235,7 +236,6 @@ int main(int argc, char** argv){
             }
             Player.DiscardCount = Player.DiscardLimit;
             Player.HandCount = Player.HandLimit;
-            WinCount = WinCount +1;
         }
 
 
