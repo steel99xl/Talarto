@@ -100,7 +100,29 @@ inline void MakeDeckStandard(Deck &D){
             D.Cards[D.Count+3].Suit = 'D';
             D.Cards[D.Count+2].IsUsed = false;
         }
-        if( i >= 11){
+        if( i >= 11 || i < 15 ){
+            D.Cards[D.Count].ID = i;
+            D.Cards[D.Count].Value = 10;
+            D.Cards[D.Count].Suit = 'S';
+            D.Cards[D.Count].IsUsed = false;
+
+            D.Cards[D.Count+1].ID = i;
+            D.Cards[D.Count+1].Value = 10;
+            D.Cards[D.Count+1].Suit = 'H';
+            D.Cards[D.Count+1].IsUsed = false;
+            
+            D.Cards[D.Count+2].ID = i;
+            D.Cards[D.Count+2].Value = 10;
+            D.Cards[D.Count+2].Suit = 'C';
+            D.Cards[D.Count+2].IsUsed = false;
+
+            D.Cards[D.Count+3].ID = i;
+            D.Cards[D.Count+3].Value = 10;
+            D.Cards[D.Count+3].Suit = 'D';
+            D.Cards[D.Count+3].IsUsed = false;
+        }
+
+        if( i == 15){
             D.Cards[D.Count].ID = i;
             D.Cards[D.Count].Value = 11;
             D.Cards[D.Count].Suit = 'S';
@@ -121,6 +143,7 @@ inline void MakeDeckStandard(Deck &D){
             D.Cards[D.Count+3].Suit = 'D';
             D.Cards[D.Count+3].IsUsed = false;
         }
+
 
         D.Count = D.Count +4;
     }
@@ -584,7 +607,7 @@ inline int ScoreDeck(Deck D,MapList SLMap, int QCResult = -1){
             break;
         case(4):
             tmp = IsPair(D);
-            Score = (QCResult * IsPair(D)) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
+            Score = (tmp * 2);
             Score = 2 * (Score  + (QCResult * IsPair(D,tmp)) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID));
             break;
         case(5):
@@ -601,7 +624,7 @@ inline int ScoreDeck(Deck D,MapList SLMap, int QCResult = -1){
             break;
         case(7):
             tmp = IsThree(D);
-            Score = (QCResult * IsThree(D)) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
+            Score = (tmp * 3);
             Score = (Score*4) + (QCResult * IsPair(D,tmp)) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
             break;
         case(8):
