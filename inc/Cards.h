@@ -155,6 +155,13 @@ inline void MarkDeckUnUsed(Deck &D){
     }
 }
 
+
+inline void MarkDeckUsed(Deck &D){
+    for(int i = 0; i < D.Count; i++){
+        D.Cards[i].IsUsed = true;
+    }
+}
+
 // Marks all transphers cards in origin deck to IsUsed 
 inline void RandomTranspher(simplerandom &Random,Deck &D, Deck &Out){
     int Temp;
@@ -407,8 +414,10 @@ inline int IsStraight(Deck &D){
                 if(Temp.Cards[j].IsUsed && i != j){
                     if(A.ID == Temp.Cards[j].ID - Count || A.ID == Temp.Cards[j].ID + Count ){
                         Count = Count + 1;
-                    } else if(A.ID == Temp.Cards[Temp.Count-j].ID - Count || A.ID == Temp.Cards[Temp.Count-j].ID + Count ){
-                        Count = Count + 1;
+                    } else if(j != 0){
+                        if(A.ID == Temp.Cards[Temp.Count-j].ID - Count || A.ID == Temp.Cards[Temp.Count-j].ID + Count ){
+                            Count = Count + 1;
+                        }
                     }
 
                     if(Count == 5){
@@ -571,6 +580,14 @@ inline const char* MapLookUp(MapList &M, Card &C){
     return "";
 }
 
+inline void SetMapAllMapIDs(MapList &M, int NewID){
+    for(int i = 0; i < M.Count; i++){
+        M.Map[i].ID = NewID;
+    }
+
+}
+
+
 
 // So we dont sort the deck
 inline int ScoreDeck(Deck D,MapList SLMap, int QCResult = -1){
@@ -585,10 +602,10 @@ inline int ScoreDeck(Deck D,MapList SLMap, int QCResult = -1){
 
     switch(QCResult){
         case(1):
-            for(int i = D.Count; i > 0; i--){
+            for(int i = D.Count-1; i > 0; i--){
                 if(D.Cards[i].IsUsed){
                     tmp = D.Cards[i].Value;
-                    for(int j = D.Count; j > 0; j--){
+                    for(int j = D.Count-1; j > 0; j--){
                         if(D.Cards[j].IsUsed && D.Cards[j].Value > tmp){
                             tmp = D.Cards[i].Value;
                         }
@@ -637,7 +654,10 @@ inline int ScoreDeck(Deck D,MapList SLMap, int QCResult = -1){
             Score = (Score * 5) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
             break;
         case(10):
-            Score = (111 * IsRoyalFlush(D)) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
+            for(int i = 0; i < D.Count; i++){
+                Score = Score + D.Cards[i].Value;
+            }
+            Score = (Score * IsRoyalFlush(D)) + (BaseScore*SLMap.Map[QCResult].ID ) * (BaseMut + SLMap.Map[QCResult].ID);
             break;
     }
 

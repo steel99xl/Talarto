@@ -5,8 +5,13 @@
 #include <stdlib.h>
 #include <math.h>
 #include <unistd.h>
-#include <termios.h>
 #include <fcntl.h>
+
+#ifndef _WIN32
+#include <termios.h>
+#else
+#define Win
+#endif
 
 #define Max_Width 512
 #define Max_Height 512
@@ -695,6 +700,17 @@ namespace  graphics{
           char KeyList[128];
           char SmartInputBuffer;
           int OldSystem_IOState;
+
+
+#ifdef Win
+
+          inline void Init(){
+              //this->OldSystem_IOState = fcntl(STDIN_FILENO, F_GETFL);
+              //fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Set STDIN to non blocking
+
+               }
+#else
+
           struct termios oldSettings;
           struct termios newSettings;
 
@@ -707,6 +723,7 @@ namespace  graphics{
               //fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK); // Set STDIN to non blocking
 
                }
+#endif
 
           inline void ThreadSmartInput(){
              char Key = getchar();
@@ -800,13 +817,16 @@ namespace  graphics{
             return getchar();
           }
 
+#ifdef Win
+          inline void Restore(){}
+          inline void IO_NONBLOCK(){}
+          inline void IO_BLOCK(){}
+
+#else
           inline void Restore(){
             tcsetattr(STDIN_FILENO, TCSANOW, &this->oldSettings);
             fcntl(STDIN_FILENO, F_SETFL, this->OldSystem_IOState);
           }
-
-
-          // Typically used for mannulay blocking input
 
           inline void IO_NONBLOCK(){
               fcntl(STDIN_FILENO, F_SETFL, fcntl(STDIN_FILENO, F_GETFL) | O_NONBLOCK);
@@ -814,6 +834,11 @@ namespace  graphics{
           inline void IO_BLOCK(){
               fcntl(STDIN_FILENO, F_SETFL, this->OldSystem_IOState);
           }
+
+#endif
+
+
+          // Typically used for mannulay blocking input
 
 
         } Input;

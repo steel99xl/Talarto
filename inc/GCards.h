@@ -9,9 +9,11 @@ typedef struct Hand{
     int Selected;
     int UsedCardsLimit;
     int DiscardLimit;
-    int HandLimit;
     int DiscardCount;
-    int HandCount;
+    int HealthLimit;
+    int Health;
+
+    int Shild;
     // Start positon of player hand drawing
     graphics::Point3D<double> Start;
     int MaxX;
@@ -19,6 +21,16 @@ typedef struct Hand{
     graphics::Pixel Box;
     graphics::Pixel Select;
 } Hand;
+
+
+typedef struct SimpleHand{
+    Deck D;
+    // What Card in the Deck is currently selected
+    int Selected;
+    int UsedCardsLimit;
+    int HealthLimit;
+    int Health;
+} SimpleHand;
 
 
 
